@@ -116,6 +116,7 @@ long_normcounts_T21 <- pivot_longer(subset_ncdf_T21, cols = -SYMBOL, names_to = 
 # add ploidy column
 long_normcounts_T21_ploidy <- long_normcounts_T21 %>% mutate(ploidy = "T21")
 
+# initial ridgeplot
 ggplot(long_normcounts_T21, aes(x = Norm_counts, y = SYMBOL, fill = SYMBOL)) +
   geom_density_ridges() +
   theme_ridges() + 
@@ -195,7 +196,7 @@ long_Zscore_T21_ploidy <- long_Zscore_T21 %>% mutate(ploidy = "T21")
 long_Zscore_D21_T21_ploidy <- rbind(long_Zscore_D21_ploidy, long_Zscore_T21_ploidy)
 
 
-# initial plot
+# initial plot without heatmap
 ggplot(long_Zscore_D21_T21_ploidy, aes(x = zscore, y = SYMBOL, fill = ploidy)) +
   geom_density_ridges(alpha = 0.6, scale = 0.99) +
   theme_ridges() + 
@@ -231,7 +232,7 @@ result2_sort <- result2 %>%
 long_Zscore_D21_T21_ploidy_TpmAvg_sort <- rbind(result_sort, result2_sort) #stick them together (sorted)
 
 
-##PLOT with TPMS
+#RIDGEPLOT including TPMS
 #plot with sorted TPMs - use text_data_sort and long_Zscore_D21_T21_ploidy_TpmAvg_sort...
 #otherwise, use text_data and long_Zscore_D21_T21_ploidy_TpmAvg
 
@@ -269,13 +270,11 @@ p + geom_text(data = text_data_sort %>% filter(ploidy == "D21"),
   theme(plot.title = element_text(size = 8, face = "bold", color = "deepskyblue4", family = "Fira Sans"))
 
 
-###heatmap code###
-
 heatmap_data <- text_data_sort %>%
   pivot_wider(names_from = ploidy, values_from = average, values_fill = NA) %>%
   arrange(SYMBOL)
 
-
+###final ridgeline plot with heatmap###
 # Base ridgeline plot
 p_ridge <- ggplot(long_Zscore_D21_T21_ploidy_TpmAvg_sort_factor, aes(x = zscore, y = SYMBOL, fill = ploidy)) +
   geom_density_ridges(alpha = 0.6, scale = 0.98) +
