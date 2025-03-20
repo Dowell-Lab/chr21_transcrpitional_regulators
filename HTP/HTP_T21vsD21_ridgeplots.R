@@ -5,8 +5,6 @@ library(ComplexHeatmap)
 library(dplyr)
 library(matrixStats)
 
-
-
 indir = "/Shares/down/public/HTP/RNAseq/"
 whichoutput="T21vsD21_noDNAdosagecorrection"
 comorbidfileroot = "Patient_mondo_logical.csv"
@@ -18,6 +16,7 @@ min_n_gene_to_high=10
 min_count_sum=100
 min_people_with_comorbid=10
 
+###prepare the HTP data for graphing###
 #read in who has which comorbidities, get "complete_trisomy_21" vs "mosaic" vs etc...
 comorbidf <-  read.csv(comorbidfile, row.names = 1)
 comorbidf
@@ -85,7 +84,7 @@ ncdf_D21<-ncdf %>% dplyr::select(maniminiD21$Patient) #96 people
 ncdfchr21_T21sim <- ncdfchr21_D21*1.5
 ncdf_T21sim <- rbind(ncdfchr21_T21sim, ncdfnotchr21_D21)
 
-###CDO ridge plot code###
+###CDO ridge plot code, select genes, z score ###
 #ncdf_T21 and ncdf_D21 which has 96 D21 individuals and 254 T21 individuals (excluding the mosaics/translocation patients)
 
 #need to get gene name back, and only table with the 34 genes we want
@@ -196,7 +195,7 @@ long_Zscore_T21_ploidy <- long_Zscore_T21 %>% mutate(ploidy = "T21")
 long_Zscore_D21_T21_ploidy <- rbind(long_Zscore_D21_ploidy, long_Zscore_T21_ploidy)
 
 
-#plot
+# initial plot
 ggplot(long_Zscore_D21_T21_ploidy, aes(x = zscore, y = SYMBOL, fill = ploidy)) +
   geom_density_ridges(alpha = 0.6, scale = 0.99) +
   theme_ridges() + 
@@ -205,7 +204,6 @@ ggplot(long_Zscore_D21_T21_ploidy, aes(x = zscore, y = SYMBOL, fill = ploidy)) +
   scale_fill_manual(values = alpha(c("red1", "blue1"), 0.6)) +
   theme(axis.text.y = element_text(size = 9, color = "black", face = "bold"))  # Customize y-axis text appearance
 
-##
 # Get TPM average values for each gene in D21 and T21
 head(subset_ncdf_D21)
 head(subset_ncdf_T21)
@@ -271,7 +269,7 @@ p + geom_text(data = text_data_sort %>% filter(ploidy == "D21"),
   theme(plot.title = element_text(size = 8, face = "bold", color = "deepskyblue4", family = "Fira Sans"))
 
 
-## heatmap code
+###heatmap code###
 
 heatmap_data <- text_data_sort %>%
   pivot_wider(names_from = ploidy, values_from = average, values_fill = NA) %>%
