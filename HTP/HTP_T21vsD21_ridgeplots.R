@@ -8,16 +8,12 @@ library(matrixStats)
 
 
 indir = "/Shares/down/public/HTP/RNAseq/"
-#whichoutput="T21vsD21_DNAdosagecorrection_match"
-#whichoutput="T21vsD21_DNAdosagecorrection"
 whichoutput="T21vsD21_noDNAdosagecorrection"
 comorbidfileroot = "Patient_mondo_logical.csv"
-#comorbidfileroot = "Patient_pheno_logical.csv"
 comorbidfile=paste0("/Shares/down/public/HTP/RNAseq/outputdata/", comorbidfileroot, sep="")
 allgenesfile = paste(indir, "outputdata/", whichoutput, "/allgeneswithgenenames_res_not_unique.csv", sep="")
 normcountsfile =paste(indir, "outputdata/",whichoutput,"/normcounts.csv", sep="")
 outdir="/scratch/Shares/dowell/temp/ChrisO/t21_reviewarticle/ouput/T21vsD21_noDNAdosagecorrection/furtherprocessing/"
-#dir.create(outdir, showWarnings = FALSE)
 min_n_gene_to_high=10
 min_count_sum=100
 min_people_with_comorbid=10
@@ -90,7 +86,6 @@ ncdfchr21_T21sim <- ncdfchr21_D21*1.5
 ncdf_T21sim <- rbind(ncdfchr21_T21sim, ncdfnotchr21_D21)
 
 ###CDO ridge plot code###
-#may need to still do zscore, but with start with the counts tables
 #ncdf_T21 and ncdf_D21 which has 96 D21 individuals and 254 T21 individuals (excluding the mosaics/translocation patients)
 
 #need to get gene name back, and only table with the 34 genes we want
