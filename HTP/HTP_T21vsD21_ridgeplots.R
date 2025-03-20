@@ -271,16 +271,7 @@ p + geom_text(data = text_data_sort %>% filter(ploidy == "D21"),
   theme(plot.title = element_text(size = 8, face = "bold", color = "deepskyblue4", family = "Fira Sans"))
 
 
-## add heatmap
-
-# Prepare heatmap data
-#heatmap_data <- text_data_sort %>%
-#  pivot_wider(names_from = ploidy, values_from = average, values_fill = NA) %>%
-#  mutate(
-#    D21 = log10(D21 + 1),   # Apply log transformation (optional)
-#    T21 = log10(T21 + 1)
-#  ) %>%
-#  arrange(SYMBOL)
+## heatmap code
 
 heatmap_data <- text_data_sort %>%
   pivot_wider(names_from = ploidy, values_from = average, values_fill = NA) %>%
